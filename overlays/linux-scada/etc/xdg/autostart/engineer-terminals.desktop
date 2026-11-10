@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=RTU terminals
+Exec=/usr/local/bin/engineer-terminals

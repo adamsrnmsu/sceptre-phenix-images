@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=HMI kiosk
+Exec=sh -c '[ -s /etc/sceptre/hmi_url ] || exit 0; u=$(cat /etc/sceptre/hmi_url); until curl -fs -m 3 -o /dev/null "$u"; do sleep 2; done; exec firefox --kiosk "$u"'

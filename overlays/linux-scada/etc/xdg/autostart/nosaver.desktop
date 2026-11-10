@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Disable X screensaver and DPMS
+Exec=sh -c 'xset s off s noblank -dpms; while sleep 300; do xset s off s noblank -dpms; done'

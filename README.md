@@ -184,6 +184,9 @@ the Makefile are shown below.
 | kali-harmonie | Kali / kali-rolling | Scapy, pybind11, HELICS, pyOpenDNP3, elasticsearch-py | Kali Linux image for the HARMONIE-SPS LDRD. | :white_check_mark: |
 | OT-Sim | Ubuntu / focal | OT-Sim, PandaPower, pyOpenDNP3, HELICS | Ubuntu image for OT-SIM and Panda Power projects | :x: |
 | bennu-dev | Ubuntu / jammy | Bennu, Brash, VS Code, xrdp, Remmina, GNOME Web, Wireshark, Nmap | A modified version of the bennu image used for developing and troubleshooting bennu mid-experiment | :white_check_mark: |
+| linux-opc | Ubuntu / noble | [asyncua](https://github.com/FreeOpcUa/opcua-asyncio) OPC UA server, pymodbus | Modbus/TCP to OPC UA gateway for the sceptre app `linux_fuxa` stack. Reads `/etc/sceptre/opc_gateway.json` | :x: |
+| linux-scada | Ubuntu / noble | [FUXA](https://github.com/frangoteam/FUXA) 1.3.1, Firefox, xfce4-terminal | One image for the `linux_fuxa` scada-server, hmi and engineer-workstation roles; the role follows the injected files (`fuxa_project.json`, `hmi_url`, `rtus.txt`) | :white_check_mark: |
+| linux-historian | Ubuntu / noble | InfluxDB 2.9.1, Telegraf 1.40.3 | Historian for the `linux_fuxa` stack. Reads `/etc/telegraf/telegraf.conf` and runs `/etc/phenix/startup/influx-setup.sh` | :x: |
 
 ## Contributing
 

@@ -1,0 +1,20 @@
+#!/bin/bash
+# POST /etc/sceptre/fuxa_project.json to the local FUXA, only when its sha256 differs
+# from the last project loaded (idempotent across reboots).
+PROJ=/etc/sceptre/fuxa_project.json
+URL=http://127.0.0.1:1881/api/project
+STAMP=/var/lib/fuxa/.project.sha256
+[ -s "$PROJ" ] || { echo "fuxa-load-project: $PROJ not injected, nothing to load"; exit 0; }
+want=$(sha256sum "$PROJ" | cut -d' ' -f1)
+[ "$(cat "$STAMP" 2>/dev/null)" = "$want" ] && { echo "fuxa-load-project: $want already loaded"; exit 0; }
+for _ in $(seq 1 90); do curl -fs -m 3 "$URL" >/dev/null && break; sleep 2; done
+curl -fs -m 3 "$URL" >/dev/null || { echo "fuxa-load-project: FUXA not answering after 180 s" >&2; exit 1; }
+# the POST restarts the FUXA runtime, so curl may get an empty reply (exit 52): judge by reading the project back
+curl -s -m 60 -X POST -H 'Content-Type: application/json' --data-binary @"$PROJ" "$URL" >/dev/null
+for _ in $(seq 1 60); do
+  if curl -fs -m 3 "$URL" | jq -e '[.devices[]? | select(.type=="OPCUA")] | length >= 1' >/dev/null 2>&1; then
+    echo "$want" > "$STAMP"; echo "fuxa-load-project: loaded $want"; exit 0
+  fi
+  sleep 2
+done
+echo "fuxa-load-project: project not visible after POST" >&2; exit 1

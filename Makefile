@@ -1,4 +1,4 @@
-.PHONY: help check_clean bookworm kali kali-harmonie jammy noble bennu minirouter _minirouter_img docker-hello-world ntp vyos ubuntu-soaptools clean ot-sim lint install-dev update-actions
+.PHONY: help check_clean bookworm kali kali-harmonie jammy noble bennu minirouter _minirouter_img docker-hello-world ntp vyos ubuntu-soaptools clean ot-sim linux-opc linux-scada linux-historian lint install-dev update-actions
 
 .ONESHELL: # for heredoc and exit
 
@@ -96,6 +96,30 @@ ot-sim:
 	@$(CHECK_IMAGE)
 	@$(CHECK_TAR)
 	@$(PHENIX) image create -r focal -T $(WORKDIR)/scripts/ot-sim.sh $(UBUNTU_MIRROR) $(COMPRESS) $(@)
+	@$(PHENIX_IMAGE_BUILD)
+	@$(INJECT_MINICCC)
+
+# Build linux-opc.qc2			-- Ubuntu Noble, OPC UA gateway (sceptre app linux_fuxa stack)
+linux-opc:
+	@$(CHECK_IMAGE)
+	@$(CHECK_TAR)
+	@$(PHENIX) image create -r noble -s 6G -O $(WORKDIR)/overlays/linux-opc -T $(WORKDIR)/scripts/linux-opc.sh $(UBUNTU_MIRROR) $(COMPRESS) $(@)
+	@$(PHENIX_IMAGE_BUILD)
+	@$(INJECT_MINICCC)
+
+# Build linux-scada.qc2			-- Ubuntu Noble, FUXA, Firefox kiosk, RTU terminals, GUI (sceptre app linux_fuxa stack)
+linux-scada:
+	@$(CHECK_IMAGE)
+	@$(CHECK_TAR)
+	@$(PHENIX) image create -r noble -v mingui -s 10G -O $(WORKDIR)/overlays/linux-scada -T $(WORKDIR)/scripts/linux-scada.sh $(UBUNTU_MIRROR) $(COMPRESS) $(@)
+	@$(PHENIX_IMAGE_BUILD)
+	@$(INJECT_MINICCC)
+
+# Build linux-historian.qc2		-- Ubuntu Noble, InfluxDB 2, Telegraf (sceptre app linux_fuxa stack)
+linux-historian:
+	@$(CHECK_IMAGE)
+	@$(CHECK_TAR)
+	@$(PHENIX) image create -r noble -s 6G -T $(WORKDIR)/scripts/linux-historian.sh $(UBUNTU_MIRROR) $(COMPRESS) $(@)
 	@$(PHENIX_IMAGE_BUILD)
 	@$(INJECT_MINICCC)
 

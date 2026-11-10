@@ -1,0 +1,13 @@
+[Unit]
+Description=OPC UA gateway (Modbus/TCP to OPC UA)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/sceptre/opc_gateway.json
+
+[Service]
+ExecStart=/opt/opcua-gateway/venv/bin/python /opt/opcua-gateway/opcua_gateway.py --config /etc/sceptre/opc_gateway.json
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
