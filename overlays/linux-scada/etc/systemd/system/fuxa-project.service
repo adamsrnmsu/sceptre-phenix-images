@@ -1,0 +1,16 @@
+[Unit]
+Description=Load the injected FUXA project
+After=fuxa.service
+Wants=fuxa.service
+ConditionPathExists=/etc/sceptre/fuxa_project.json
+
+# Own bounded oneshot, not a phenix startup script: FUXA spends ~60 s on plugin init
+# and a slow or failed load must not leave phenix.service activating.
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/fuxa-load-project
+TimeoutStartSec=420
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

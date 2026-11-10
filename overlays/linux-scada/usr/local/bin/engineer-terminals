@@ -1,0 +1,11 @@
+#!/bin/bash
+# One terminal per line of /etc/sceptre/rtus.txt ("<name> [<ip>]"), SSH as the `sceptre` user
+# (bennu image: login shell is bennu-brash). Password sceptre unless /etc/sceptre/rtu_password exists.
+[ -s /etc/sceptre/rtus.txt ] || exit 0
+pw=sceptre
+[ -s /etc/sceptre/rtu_password ] && pw=$(cat /etc/sceptre/rtu_password)
+while read -r rtu ip _; do
+  case "$rtu" in ''|\#*) continue ;; esac
+  xfce4-terminal --title "$rtu" -e "sh -c 'while :; do sshpass -p \"$pw\" ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null sceptre@${ip:-$rtu}; sleep 3; done'" &
+done < /etc/sceptre/rtus.txt
+wait

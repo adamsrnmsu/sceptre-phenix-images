@@ -32,7 +32,10 @@ jobs:
             minirouter,
             ubuntu-soaptools,
             ot-sim,
-            bennu-dev
+            bennu-dev,
+            linux-opc,
+            linux-scada,
+            linux-historian
           ]
     runs-on: ubuntu-latest
     permissions:
@@ -131,7 +134,10 @@ jobs:
             minirouter,
             ubuntu-soaptools,
             ot-sim,
-            bennu-dev
+            bennu-dev,
+            linux-opc,
+            linux-scada,
+            linux-historian
           ]
     # Only run on main branch for scheduled or manual workflow_dispatch events
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
